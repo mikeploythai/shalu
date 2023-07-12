@@ -1,12 +1,9 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import type { ContentType } from "@/lib/types";
 import { useState } from "react";
+import DeleteLayout from "./delete-layout";
 import EditLayout from "./edit-layout";
 
 type OptionsModal = {
@@ -25,7 +22,7 @@ export default function OptionsModal({ contentType, children }: OptionsModal) {
         {contentType === "edit" ? (
           <EditLayout setIsOpen={setIsOpen} />
         ) : (
-          <AlertDialogHeader>Hey</AlertDialogHeader>
+          <DeleteLayout setIsOpen={setIsOpen} />
         )}
       </AlertDialogContent>
     </AlertDialog>

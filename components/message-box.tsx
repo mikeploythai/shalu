@@ -1,14 +1,24 @@
 "use client";
 
+import type { UnstrictMessage } from "@/drizzle/schema";
+import { UserContext } from "@/lib/context";
 import useFormTools from "@/lib/hooks/useFormTools";
 import type { FormSchema } from "@/lib/types";
+import type { User } from "@clerk/nextjs/dist/types/server";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
 import { useController } from "react-hook-form";
 import MessageForm from "./message-form";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
+import { useToast } from "./ui/use-toast";
 
 export default function MessageBox() {
   const formId = "new-message";
+  const user: User = JSON.parse(useContext(UserContext)!.toString());
+
+  const router = useRouter();
+  const { toast } = useToast();
   const { form } = useFormTools({});
   const {
     fieldState: { error },
@@ -18,9 +28,34 @@ export default function MessageBox() {
     name: "message",
   });
 
-  function action(values: FormSchema) {
-    alert(values.message);
-    form.reset();
+  async function action(values: FormSchema) {
+    const body: UnstrictMessage = {
+      authorId: user.id,
+      content: values.message,
+    };
+
+    const res = await fetch("/api/post-message", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+      router.refresh();
+      form.reset();
+      toast({
+        title: "Success!",
+        description: "Your message was posted 🥳",
+      });
+    } else {
+      toast({
+        title: "Error!",
+        description: "We couldn't post your message 😭",
+        variant: "destructive",
+      });
+    }
   }
 
   return (

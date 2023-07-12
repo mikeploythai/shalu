@@ -1,8 +1,8 @@
 "use client";
 
-import MessageForm from "@/components/message-form";
 import {
   AlertDialogCancel,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -11,38 +11,28 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import type { Message, UnstrictMessage } from "@/drizzle/schema";
 import { MessageContext } from "@/lib/context";
-import useFormTools from "@/lib/hooks/useFormTools";
-import type { FormSchema } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { useController } from "react-hook-form";
+import { useContext, useState } from "react";
 
-export default function EditLayout({
+export default function DeleteLayout({
   setIsOpen,
 }: {
   setIsOpen: (state: boolean) => void;
 }) {
-  const formId = "edit-message";
   const message: Message = JSON.parse(useContext(MessageContext)!.toString());
 
   const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
-  const { form } = useFormTools({ defaultValue: message.content });
-  const {
-    formState: { isValid, isDirty, isSubmitting },
-  } = useController({
-    control: form.control,
-    name: "message",
-  });
 
-  async function action(values: FormSchema) {
+  async function handleDelete() {
+    setIsDeleting(true);
     const body: UnstrictMessage = {
       id: message.id,
-      content: values.message,
     };
 
-    const res = await fetch("/api/update-message", {
-      method: "post",
+    const res = await fetch("/api/delete-message", {
+      method: "delete",
       headers: {
         "Content-Type": "application/json",
       },
@@ -52,14 +42,15 @@ export default function EditLayout({
     if (res.ok) {
       router.refresh();
       setIsOpen(false);
+      setIsDeleting(false);
       toast({
         title: "Success!",
-        description: "Your message was updated 😁",
+        description: "Your message was deleted 🫡",
       });
     } else {
       toast({
         title: "Error!",
-        description: "We couldn't update your message 😰",
+        description: "We couldn't delete your message 🤡",
         variant: "destructive",
       });
     }
@@ -68,20 +59,22 @@ export default function EditLayout({
   return (
     <>
       <AlertDialogHeader>
-        <AlertDialogTitle>Editing Message</AlertDialogTitle>
+        <AlertDialogTitle>Do you really wanna delete this? 😢</AlertDialogTitle>
+
+        <AlertDialogDescription>
+          You can&apos;t undo this action!
+        </AlertDialogDescription>
       </AlertDialogHeader>
 
-      <MessageForm form={form} formId={formId} action={action} />
-
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
 
         <Button
-          form={formId}
-          type="submit"
-          disabled={!isValid || !isDirty || isSubmitting}
+          variant="destructive"
+          disabled={isDeleting}
+          onClick={handleDelete}
         >
-          {!isSubmitting ? "Update" : "Updating..."}
+          {!isDeleting ? "Hell yeah brother 🦅" : "Deleting..."}
         </Button>
       </AlertDialogFooter>
     </>

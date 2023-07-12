@@ -1,38 +1,43 @@
-import { MessageContext } from "@/lib/message-context";
-import { Message } from "@/lib/types";
+import type { Message } from "@/drizzle/schema";
+import { MessageContext } from "@/lib/context";
+import { clerkClient } from "@clerk/nextjs";
+import { RocketIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { useContext } from "react";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 
-export default function UserHover() {
+export default async function UserHover() {
   const message: Message = JSON.parse(useContext(MessageContext)!.toString());
+  const author = await clerkClient.users.getUser(message.authorId!);
 
   return (
     <HoverCard>
       <HoverCardTrigger>
         <Avatar>
-          <AvatarFallback></AvatarFallback>
+          <AvatarImage
+            src={author.imageUrl}
+            alt={`${author.username}'s profile picture`}
+          />
         </Avatar>
       </HoverCardTrigger>
 
-      <HoverCardContent className="mx-2 my-1 space-y-4 overflow-auto">
-        <header className="flex items-center gap-2.5">
+      <HoverCardContent className="mx-2 my-1 space-y-4">
+        <header className="flex items-center gap-2.5 overflow-auto">
           <Avatar>
-            <AvatarFallback></AvatarFallback>
+            <AvatarImage
+              src={author.imageUrl}
+              alt={`${author.username}'s profile picture`}
+            />
           </Avatar>
 
-          <Link
-            href="/"
-            className="truncate text-xl font-semibold leading-none tracking-tight hover:underline"
-          >
-            @{message.username}
-          </Link>
+          <h3 className="truncate text-xl font-semibold tracking-tight">
+            @{author.username}
+          </h3>
         </header>
 
-        <footer className="text-xs">
-          Joined {dayjs(message.createdAt).format("MM/DD/YYYY")}
+        <footer className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+          <RocketIcon /> Joined {dayjs(author.createdAt).format("MM/DD/YYYY")}
         </footer>
       </HoverCardContent>
     </HoverCard>

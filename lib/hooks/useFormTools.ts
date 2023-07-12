@@ -6,7 +6,7 @@ import type { FormSchema } from "../types";
 export default function useFormTools({
   defaultValue,
 }: {
-  defaultValue?: string;
+  defaultValue?: string | null;
 }) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),

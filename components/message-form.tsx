@@ -1,5 +1,8 @@
+"use client";
+
 import type { FormSchema } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 import { UseFormReturn } from "react-hook-form";
 import { Form, FormField } from "./ui/form";
 import { Textarea } from "./ui/textarea";
@@ -7,10 +10,16 @@ import { Textarea } from "./ui/textarea";
 interface MessageForm extends React.HTMLAttributes<HTMLTextAreaElement> {
   form: UseFormReturn<FormSchema>;
   formId: string;
-  action: (values: FormSchema) => void
+  action: (values: FormSchema) => void;
 }
 
-export default function MessageForm({ className, form, formId, action }: MessageForm) {
+export default function MessageForm({
+  className,
+  form,
+  formId,
+  action,
+}: MessageForm) {
+  const { isLoaded: isUserLoaded } = useUser();
 
   return (
     <Form {...form}>
@@ -21,6 +30,7 @@ export default function MessageForm({ className, form, formId, action }: Message
           render={({ field }) => (
             <Textarea
               placeholder="Say something nice :)"
+              disabled={!isUserLoaded}
               className={cn(
                 "h-36 resize-none p-4 shadow-none transition focus-visible:bg-slate-100 focus-visible:ring-0 focus-visible:ring-offset-0 dark:focus-visible:bg-slate-900",
                 className
