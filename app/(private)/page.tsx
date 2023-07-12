@@ -11,6 +11,7 @@ import {
   redirectToSignIn,
 } from "@clerk/nextjs";
 import { desc } from "drizzle-orm";
+import { Fragment } from "react";
 
 export default async function Home() {
   const user = await currentUser();
@@ -33,7 +34,7 @@ export default async function Home() {
         ) : (
           <section className="mx-auto grid max-w-screen-xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {messages.map((message) => (
-              <>
+              <Fragment key={message.id}>
                 <ClerkLoading>
                   <Skeleton className="h-44 w-full rounded-xl" />
                 </ClerkLoading>
@@ -41,7 +42,7 @@ export default async function Home() {
                 <ClerkLoaded>
                   <MessageCard key={message.id} message={message} />
                 </ClerkLoaded>
-              </>
+              </Fragment>
             ))}
           </section>
         )}

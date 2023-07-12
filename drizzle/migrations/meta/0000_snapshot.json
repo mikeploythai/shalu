@@ -1,11 +1,11 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "4c25fde6-ac21-4d81-9a0c-ac7c0d2627d8",
+  "id": "dc39db6c-b03f-4f8b-882a-81b3e5a9e23d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "post": {
-      "name": "post",
+    "message": {
+      "name": "message",
       "columns": {
         "id": {
           "name": "id",
@@ -21,8 +21,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "message": {
-          "name": "message",
+        "content": {
+          "name": "content",
           "type": "varchar(500)",
           "primaryKey": false,
           "notNull": false,
@@ -41,7 +41,8 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "onUpdate": true
         }
       },
       "indexes": {},

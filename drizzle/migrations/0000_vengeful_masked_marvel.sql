@@ -1,7 +1,7 @@
-CREATE TABLE `post` (
+CREATE TABLE `message` (
 	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	`authorId` varchar(256),
-	`message` varchar(500),
+	`content` varchar(500),
 	`createdAt` timestamp DEFAULT (now()),
-	`updatedAt` timestamp
+	`updatedAt` timestamp ON UPDATE CURRENT_TIMESTAMP
 );
