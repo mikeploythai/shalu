@@ -28,7 +28,7 @@ export default async function MessageCard({ message }: { message: Message }) {
   return (
     <MessageContext.Provider value={JSON.stringify(message)}>
       <TooltipProvider>
-        <Card className="overflow-auto transition hover:shadow-lg dark:hover:bg-slate-900">
+        <Card className="flex flex-col overflow-auto transition hover:shadow-lg dark:hover:bg-slate-900">
           <CardHeader className="flex-row items-center gap-2.5 space-y-0">
             <UserHover />
 
@@ -39,8 +39,8 @@ export default async function MessageCard({ message }: { message: Message }) {
             <MessageOptions />
           </CardHeader>
 
-          <CardContent>
-            <p className="text-sm">{message.content}</p>
+          <CardContent className="flex-1">
+            <p className="whitespace-pre-line text-sm">{message.content}</p>
           </CardContent>
 
           <CardFooter className="flex items-center justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
