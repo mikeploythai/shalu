@@ -21,6 +21,7 @@ export default function MessageBox() {
   const { toast } = useToast();
   const { form } = useFormTools({});
   const {
+    field: { value },
     fieldState: { error },
     formState: { isValid, isDirty, isSubmitting },
   } = useController({
@@ -70,10 +71,22 @@ export default function MessageBox() {
       </CardContent>
 
       <CardFooter className="items-center justify-end gap-2.5 border-t border-t-slate-200 p-0 dark:border-t-slate-800">
-        {error && (
-          <p className="text-[0.8rem] font-medium text-red-500 dark:text-red-900">
-            {error.message}
+        {value.length <= 500 ? (
+          <p
+            className={`text-[0.8rem] font-medium ${
+              value.length >= 450
+                ? "text-red-500 dark:text-red-900"
+                : "text-slate-500 dark:text-slate-400"
+            }`}
+          >
+            {500 - value.length} characters
           </p>
+        ) : (
+          error && (
+            <p className="text-[0.8rem] font-medium text-red-500 dark:text-red-900">
+              {error.message}
+            </p>
+          )
         )}
 
         <Button

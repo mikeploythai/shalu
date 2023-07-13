@@ -29,6 +29,8 @@ export default function EditLayout({
   const { toast } = useToast();
   const { form } = useFormTools({ defaultValue: message.content });
   const {
+    field: { value },
+    fieldState: { error },
     formState: { isValid, isDirty, isSubmitting },
   } = useController({
     control: form.control,
@@ -74,6 +76,24 @@ export default function EditLayout({
       <MessageForm form={form} formId={formId} action={action} />
 
       <AlertDialogFooter>
+        {value.length <= 500 ? (
+          <p
+            className={`mb-2 text-center text-[0.8rem] font-medium sm:my-auto ${
+              value.length >= 450
+                ? "text-red-500 dark:text-red-900"
+                : "text-slate-500 dark:text-slate-400"
+            }`}
+          >
+            {500 - value.length} characters
+          </p>
+        ) : (
+          error && (
+            <p className="mb-2 text-center text-[0.8rem] font-medium text-red-500 dark:text-red-900 sm:my-auto">
+              {error.message}
+            </p>
+          )
+        )}
+
         <AlertDialogCancel>Cancel</AlertDialogCancel>
 
         <Button
