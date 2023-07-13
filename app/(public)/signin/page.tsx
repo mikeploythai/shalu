@@ -24,7 +24,7 @@ export default function SignInPage() {
         <AuthHeader />
 
         <div className="flex flex-col gap-4 p-4 sm:m-8 sm:max-w-md sm:flex-1 sm:justify-center sm:gap-8 sm:p-0">
-          <h1 className="text-3xl font-bold md:text-4xl">
+          <h1 className="text-3xl font-semibold md:text-4xl">
             Farewell, our sweet Indian prince... 👑
           </h1>
 
