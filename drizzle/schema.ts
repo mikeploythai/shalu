@@ -1,5 +1,11 @@
 import { InferModel } from "drizzle-orm";
-import { mysqlTable, serial, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  boolean,
+  mysqlTable,
+  serial,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const message = mysqlTable("message", {
   id: serial("id").primaryKey(),
@@ -7,6 +13,7 @@ export const message = mysqlTable("message", {
   content: varchar("content", { length: 500 }),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").onUpdateNow(),
+  isPinned: boolean("isPinned"),
 });
 
 export type Message = InferModel<typeof message>;

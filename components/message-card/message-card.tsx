@@ -1,9 +1,10 @@
 import type { Message } from "@/drizzle/schema";
-import { MessageContext } from "@/lib/context";
+import { MessageContext, UserContext } from "@/lib/context";
 import { clerkClient } from "@clerk/nextjs";
-import { Pencil1Icon } from "@radix-ui/react-icons";
+import type { User } from "@clerk/nextjs/dist/types/server";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useContext } from "react";
 import {
   Card,
   CardContent,
@@ -11,57 +12,59 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { TooltipProvider } from "../ui/tooltip";
 import UserHover from "../user-hover";
 import MessageOptions from "./message-options";
+import PinnedIcon from "./pinned-icon";
+import UpdatedIcon from "./updated-icon";
 
 dayjs.extend(relativeTime);
 
-export default async function MessageCard({ message }: { message: Message }) {
-  const author = await clerkClient.users.getUser(message.authorId!);
+export default function MessageCard({ message }: { message: Message }) {
+  const { id: currentUserId } = JSON.parse(
+    useContext(UserContext)!.toString()
+  ) as User;
 
-  return (
-    <MessageContext.Provider value={JSON.stringify(message)}>
-      <TooltipProvider>
-        <Card className="flex flex-col overflow-auto transition hover:shadow-lg dark:hover:bg-slate-900">
-          <CardHeader className="flex-row items-center gap-2.5 space-y-0">
-            <UserHover />
+  async function Message() {
+    const author = await clerkClient.users.getUser(message.authorId!);
 
-            <CardTitle className="truncate text-xl">
-              @{author.username}
-            </CardTitle>
+    return (
+      <MessageContext.Provider value={JSON.stringify(message)}>
+        <TooltipProvider>
+          <Card
+            className={`flex flex-col overflow-auto transition hover:shadow-lg dark:hover:bg-slate-900 ${
+              message.isPinned &&
+              "border-dashed bg-transparent shadow-none hover:shadow-none dark:hover:bg-transparent"
+            }`}
+          >
+            <CardHeader className="flex-row items-center gap-2.5 space-y-0">
+              <UserHover />
 
-            <MessageOptions />
-          </CardHeader>
+              <CardTitle className="truncate text-xl">
+                @{author.username}
+              </CardTitle>
 
-          <CardContent className="flex-1">
-            <p className="whitespace-pre-line text-sm">{message.content}</p>
-          </CardContent>
+              <div className="ml-auto flex items-center">
+                {message.isPinned && <PinnedIcon />}
+                {currentUserId === author.id && <MessageOptions />}
+              </div>
+            </CardHeader>
 
-          <CardFooter className="flex items-center justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
-            {message.updatedAt && (
-              <>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Pencil1Icon />
-                  </TooltipTrigger>
+            <CardContent className="flex-1">
+              <p className="whitespace-pre-line text-sm">{message.content}</p>
+            </CardContent>
 
-                  <TooltipContent className="mx-2 my-1">
-                    Updated {dayjs().to(message.updatedAt)} 🤥
-                  </TooltipContent>
-                </Tooltip>
-                &middot;
-              </>
-            )}
-            <p className="text-xs">{dayjs().to(message.createdAt)}</p>
-          </CardFooter>
-        </Card>
-      </TooltipProvider>
-    </MessageContext.Provider>
-  );
+            <CardFooter className="flex items-center justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+              {message.updatedAt && (
+                <UpdatedIcon updatedAt={dayjs().to(message.updatedAt)} />
+              )}
+              <p className="text-xs">{dayjs().to(message.createdAt)}</p>
+            </CardFooter>
+          </Card>
+        </TooltipProvider>
+      </MessageContext.Provider>
+    );
+  }
+
+  return <Message />;
 }

@@ -18,7 +18,7 @@ export default async function Home() {
   const messages: Message[] = await db
     .select()
     .from(message)
-    .orderBy(desc(message.createdAt));
+    .orderBy(desc(message.isPinned), desc(message.createdAt));
 
   if (!user) {
     redirectToSignIn();
