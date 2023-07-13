@@ -79,7 +79,7 @@ export default function MessageBox() {
                 : "text-slate-500 dark:text-slate-400"
             }`}
           >
-            {500 - value.length} characters
+            {value.length}/500
           </p>
         ) : (
           error && (
