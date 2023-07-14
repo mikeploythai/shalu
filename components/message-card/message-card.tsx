@@ -4,6 +4,7 @@ import { clerkClient } from "@clerk/nextjs";
 import type { User } from "@clerk/nextjs/dist/types/server";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Image from "next/image";
 import { useContext } from "react";
 import {
   Card,
@@ -50,8 +51,19 @@ export default function MessageCard({ message }: { message: Message }) {
               </div>
             </CardHeader>
 
-            <CardContent className="flex-1">
+            <CardContent className="flex-1 space-y-4">
               <p className="whitespace-pre-line text-sm">{message.content}</p>
+
+              {message.attachments && (
+                <figure className="relative h-60 w-full overflow-hidden rounded-md bg-slate-200 dark:bg-slate-800">
+                  <Image
+                    src={message.attachments}
+                    alt=""
+                    className="object-cover"
+                    fill
+                  />
+                </figure>
+              )}
             </CardContent>
 
             <CardFooter className="flex items-center justify-end gap-1.5 text-xs text-slate-500 dark:text-slate-400">

@@ -5,18 +5,21 @@ import { UserContext } from "@/lib/context";
 import useFormTools from "@/lib/hooks/useFormTools";
 import type { FormSchema } from "@/lib/types";
 import type { User } from "@clerk/nextjs/dist/types/server";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useController } from "react-hook-form";
 import MessageForm from "./message-form";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { useToast } from "./ui/use-toast";
+import UploadModal from "./upload-modal";
 
 export default function MessageBox() {
   const formId = "new-message";
   const user: User = JSON.parse(useContext(UserContext)!.toString());
 
+  const [photoUrl, setPhotoUrl] = useState<string | null>();
   const router = useRouter();
   const { toast } = useToast();
   const { form } = useFormTools({});
@@ -33,6 +36,7 @@ export default function MessageBox() {
     const body: UnstrictMessage = {
       authorId: user.id,
       content: values.message,
+      attachments: photoUrl || null,
     };
 
     const res = await fetch("/api/post-message", {
@@ -46,6 +50,8 @@ export default function MessageBox() {
     if (res.ok) {
       router.refresh();
       form.reset();
+      setPhotoUrl(null);
+
       toast({
         title: "Success!",
         description: "Your message was posted 🥳",
@@ -71,6 +77,21 @@ export default function MessageBox() {
       </CardContent>
 
       <CardFooter className="items-center justify-end gap-2.5 border-t border-t-slate-200 p-0 dark:border-t-slate-800">
+        <div className="mr-auto flex items-center gap-1.5">
+          <UploadModal setPhotoUrl={setPhotoUrl} className="rounded-none" />
+
+          {photoUrl && (
+            <Image
+              src={photoUrl}
+              alt=""
+              height={24}
+              width={24}
+              quality={10}
+              className="aspect-square rounded border border-slate-200 object-cover dark:border-slate-800"
+            />
+          )}
+        </div>
+
         {value.length <= 500 ? (
           <p
             className={`text-[0.8rem] font-medium ${

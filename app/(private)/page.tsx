@@ -36,7 +36,7 @@ export default async function Home() {
             {messages.map((message) => (
               <Fragment key={message.id}>
                 <ClerkLoading>
-                  <Skeleton className="h-44 w-full rounded-xl" />
+                  <Skeleton className="h-96 w-full rounded-xl" />
                 </ClerkLoading>
 
                 <ClerkLoaded>

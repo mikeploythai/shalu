@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import UploadModal from "@/components/upload-modal";
 import type { Message, UnstrictMessage } from "@/drizzle/schema";
 import { MessageContext } from "@/lib/context";
 import useFormTools from "@/lib/hooks/useFormTools";
 import type { FormSchema } from "@/lib/types";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useController } from "react-hook-form";
 
 export default function EditLayout({
@@ -25,6 +27,9 @@ export default function EditLayout({
   const formId = "edit-message";
   const message: Message = JSON.parse(useContext(MessageContext)!.toString());
 
+  const [photoUrl, setPhotoUrl] = useState<string | null>(
+    message.attachments || null
+  );
   const router = useRouter();
   const { toast } = useToast();
   const { form } = useFormTools({ defaultValue: message.content });
@@ -41,6 +46,7 @@ export default function EditLayout({
     const body: UnstrictMessage = {
       id: message.id,
       content: values.message,
+      attachments: photoUrl || null,
     };
 
     const res = await fetch("/api/update-message", {
@@ -76,6 +82,21 @@ export default function EditLayout({
       <MessageForm form={form} formId={formId} action={action} />
 
       <AlertDialogFooter>
+        <div className="mr-auto flex items-center gap-1.5">
+          <UploadModal setPhotoUrl={setPhotoUrl} />
+
+          {photoUrl && (
+            <Image
+              src={photoUrl}
+              alt=""
+              height={24}
+              width={24}
+              quality={10}
+              className="aspect-square rounded border border-slate-200 object-cover dark:border-slate-800"
+            />
+          )}
+        </div>
+
         {value.length <= 500 ? (
           <p
             className={`mb-2 text-center text-[0.8rem] font-medium sm:my-auto ${
@@ -99,7 +120,10 @@ export default function EditLayout({
         <Button
           form={formId}
           type="submit"
-          disabled={!isValid || !isDirty || isSubmitting}
+          disabled={
+            photoUrl === message.attachments &&
+            (!isValid || !isDirty || isSubmitting)
+          }
         >
           {!isSubmitting ? "Update" : "Updating..."}
         </Button>

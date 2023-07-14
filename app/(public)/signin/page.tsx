@@ -1,9 +1,17 @@
 import AuthCard from "@/components/auth/auth-card";
 import AuthHeader from "@/components/auth/auth-header";
 import Shalu from "@/public/38FE1D29-14E9-4CB1-B789-F67B1C18D699_1_105_c.jpeg";
+import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-export default function SignInPage() {
+export default async function SignInPage() {
+  const user = await currentUser();
+
+  if (user) {
+    redirect("/");
+  }
+
   return (
     <main className="grid min-h-screen sm:grid-cols-3 lg:grid-cols-2">
       <figure className="group relative overflow-hidden sm:border-r sm:border-r-slate-200 dark:sm:border-r-slate-800">

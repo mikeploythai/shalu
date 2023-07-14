@@ -15,6 +15,20 @@
       "when": 1689208405382,
       "tag": "0001_busy_jigsaw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1689329726633,
+      "tag": "0002_lively_goliath",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1689331648480,
+      "tag": "0003_concerned_preak",
+      "breakpoints": true
     }
   ]
 }
