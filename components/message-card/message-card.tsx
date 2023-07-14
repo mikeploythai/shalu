@@ -55,7 +55,7 @@ export default function MessageCard({ message }: { message: Message }) {
               <p className="whitespace-pre-line text-sm">{message.content}</p>
 
               {message.attachments && (
-                <figure className="relative h-60 w-full overflow-hidden rounded-md bg-slate-200 dark:bg-slate-800">
+                <figure className="relative aspect-video w-full overflow-hidden rounded-md border border-slate-200 bg-slate-200 dark:border-slate-800 dark:bg-slate-800">
                   <Image
                     src={message.attachments}
                     alt=""
