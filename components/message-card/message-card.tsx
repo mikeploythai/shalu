@@ -51,7 +51,7 @@ export default function MessageCard({ message }: { message: Message }) {
               </div>
             </CardHeader>
 
-            <CardContent className="flex-1 space-y-4">
+            <CardContent className="flex flex-1 flex-col justify-between space-y-4">
               <p className="whitespace-pre-line text-sm">{message.content}</p>
 
               {message.attachments && (
