@@ -36,9 +36,9 @@ export default function UploadModal({ className, setPhotoUrl }: UploadModal) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Attach Images</AlertDialogTitle>
-          
+
           <AlertDialogDescription>
-            Powered by UploadThing. Landscape photos work best!
+            Landscape photos work best!
           </AlertDialogDescription>
         </AlertDialogHeader>
 
