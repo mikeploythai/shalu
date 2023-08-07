@@ -8,4 +8,4 @@ He loved the gift, and read every message out loud. It was a very sweet moment a
 
 ***
 
-August 5th, 2023 - the app is now open source. I didn't open it up for a while because I wanted to clean up the code first... I might've forgotten to do that lol. Anyway, this code is definitely not the cleanest, nor my best, but that's okay. Imperfections are okay. Whenever I start creating that private platform I mentioned above, I'll be using this repo, and moving the old code into its own branch :)
+August 7th, 2023 - the original code has moved to the [`og` branch](https://github.com/mploythai/shalu/tree/og). The main branch will be transitioning to an Astro project that preserves the messages forever. This decision was made because the database goes to sleep after 2 weeks of inactivity, and I'd like Shaleen to be able to go back and read these messages at any time.

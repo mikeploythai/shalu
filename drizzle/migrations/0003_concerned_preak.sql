@@ -1,1 +1,0 @@
-ALTER TABLE `message` MODIFY COLUMN `attachments` text;
