@@ -1,15 +1,30 @@
-<article class="p-6 border bg-white">
+---
+const { message } = Astro.props;
+---
+
+<article
+  class="flex flex-col justify-between p-6 border border-slate-200 bg-white rounded-xl shadow-lg shadow-slate-950/10 dark:bg-slate-950 dark:border-slate-800 dark:shadow-none"
+>
   <div class="flex items-center gap-3">
-    <img class="h-8 w-8 rounded-full bg-slate-800 m-0" />
-    <h2 class="m-0">@mikeploythai</h2>
+    <img
+      src={message.avatarUrl}
+      alt={message.author}
+      class="h-8 w-8 rounded-full border border-slate-200 bg-slate-800 m-0 object-cover dark:border-slate-800"
+    />
+    <h2 class="m-0">{message.author}</h2>
   </div>
 
-  <p>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem
-    sunt, quod tempora optio repudiandae, aliquam a quaerat ea odio ratione
-    voluptas perspiciatis odit nihil natus commodi assumenda sapiente quam
-    distinctio.
+  <p class="mt-0 mb-auto whitespace-pre-line">
+    {message.content}
   </p>
 
-  <img class="aspect-video w-full bg-slate-800 m-0" />
+  {
+    message.imageUrl && (
+      <img
+        src={message.imageUrl}
+        alt=""
+        class="aspect-video w-full mb-0 bg-slate-200 object-cover border border-slate-200 rounded-md dark:border-slate-800 dark:bg-slate-800"
+      />
+    )
+  }
 </article>

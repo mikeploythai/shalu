@@ -1,25 +1,43 @@
 ---
 import Card from "../components/card.astro";
+import messages from "../lib/messages";
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Shalu!</title>
   </head>
 
-  <body class="prose prose-slate prose-sm max-w-none bg-slate-50">
-    <article class="max-w-screen-lg mx-auto p-8">
+  <body
+    class="prose prose-slate prose-sm max-w-none bg-slate-50 dark:bg-slate-950 dark:prose-invert"
+  >
+    <article class="max-w-screen-xl mx-auto p-8">
       <hgroup>
         <h1>Farewell, our sweet Indian prince... 👑</h1>
-        <p class="lead">We'll miss you, Shaleen!</p>
+        <p class="lead mb-8">We'll miss you, Shaleen!</p>
       </hgroup>
 
-      <section class="grid">
-        <Card />
+      <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {messages.map((message) => <Card {message} />)}
+
+        <article
+          class="flex justify-center items-center p-6 border border-dashed border-slate-200 rounded-xl dark:border-slate-800"
+        >
+          <hgroup class="text-center">
+            <h2 class="mt-0">Created by Mike Ploythai</h2>
+            <a
+              href="https://github.com/mploythai/shalu"
+              target="_blank"
+              referrerpolicy="strict-origin-when-cross-origin"
+            >
+              Source Code
+            </a>
+          </hgroup>
+        </article>
       </section>
     </article>
   </body>
