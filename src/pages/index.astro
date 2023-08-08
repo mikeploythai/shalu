@@ -1,15 +1,26 @@
 ---
+import Card from "../components/card.astro";
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Shalu!</title>
+  </head>
+
+  <body class="prose prose-slate prose-sm max-w-none bg-slate-50">
+    <article class="max-w-screen-lg mx-auto p-8">
+      <hgroup>
+        <h1>Farewell, our sweet Indian prince... 👑</h1>
+        <p class="lead">We'll miss you, Shaleen!</p>
+      </hgroup>
+
+      <section class="grid">
+        <Card />
+      </section>
+    </article>
+  </body>
 </html>
